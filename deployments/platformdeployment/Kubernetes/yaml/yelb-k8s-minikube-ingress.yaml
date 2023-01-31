@@ -59,7 +59,7 @@ spec:
     app: yelb-ui
     tier: frontend
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: yelb-ui-ingress
@@ -69,9 +69,12 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend: 
-              serviceName: yelb-ui
-              servicePort: 80
+              service: 
+                name: yelb-ui
+                port: 
+                  number: 80
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -91,7 +94,7 @@ spec:
     spec:
       containers:
       - name: yelb-ui
-        image: mreferre/yelb-ui:0.7
+        image: mreferre/yelb-ui:0.10
         ports:
         - containerPort: 80
 ---
@@ -135,7 +138,7 @@ spec:
     spec:
       containers:
       - name: yelb-db
-        image: mreferre/yelb-db:0.5
+        image: mreferre/yelb-db:0.6
         ports:
         - containerPort: 5432
 ---
@@ -157,14 +160,6 @@ spec:
     spec:
       containers:
       - name: yelb-appserver
-        image: mreferre/yelb-appserver:0.5
+        image: mreferre/yelb-appserver:0.7
         ports:
         - containerPort: 4567
-
-
-
-
-
-
-
-
